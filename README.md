@@ -1,27 +1,101 @@
-# AngularAuthExample
+# Autenticação usando Angular: Exemplo
+Exemplo com a **lógica necessária** para implementar uma autenticação utilizando o framework, mas a ideia serve para qualquer aplicação Front. 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.3.
+## Página de Login
+Para iniciar tudo suba o servidor com a API e com o Angular usando os comandos:
 
-## Development server
+> npm install 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Depois que instalar tudo:
 
-## Code scaffolding
+> node server.js
+> ng serve --port 4000
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Feito isso, abra o componente `/src/app/listagem/listagem.component.ts` e observe a lógica de funcionamento do componente a parte principal é:
+```ts
+    constructor() {
+      // Valida o Token: Existe, manda para a página inicial de logado
+      if(localStorage.getItem('AUTH-TOKEN')) {
+        console.log('Valida o Token: Existe, manda para a página inicial de logado')
+        this.router.navigate(['/listagem'])
+      }
+```
 
-## Build
+Quando o usuário fizer um login bem sucedido, salve o token que o servidor devolve da sua requisição no `localStorage` e redirecionamos o usuário para uma página interna
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+```ts
+    const cabecalho = new Headers()
+    cabecalho.append('Content-Type', 'application/json')
 
-## Running unit tests
+    this.http.post(
+      'http://localhost:4001/login',
+      JSON.stringify(this.usuario),
+      {
+        headers: cabecalho
+      }
+    )
+    .subscribe((resposta) => {
+      const tokenDoUsuario = resposta.text()
+      console.log(`O servidor nos devolveu o TOKEN: `)
+      console.log(tokenDoUsuario)
+      console.log(`Devemos salvar ele no localStorage`)
+      // Salvando no localStorage
+      localStorage.setItem('AUTH-TOKEN', tokenDoUsuario)
+      // Manda o usuário para uma nova rota da aplicação
+      this.router.navigate(['/listagem'])
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+    })
+```
+## Páginas internas do Sistema
 
-## Running end-to-end tests
+Verifica se o token existe: 
+```ts
+  constructor() {
+    // Valida o Token: Não existe, manda pra URL do login
+    if(!localStorage.getItem('AUTH-TOKEN')) {
+      console.log('Valida o Token: Não existe, manda pro login')
+      this.router.navigate(['/'])
+    }
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Sempre que for fazer **QUALQUER** requisição que precise do token, devemos passar ele via **cabeçalho da requisição** (Headers) ou parametro na **URL**
+```ts
+this.http
+    .get(`${this.URL}/?auth-token=${localStorage.getItem('AUTH-TOKEN')}`)
+    .subscribe(
+      (resposta) => {
+        const respostaEmJson = resposta.json()
+        this.mensagens = respostaEmJson
+      }
+    )
+```
 
-## Further help
+## Página de logout
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Simplesmente, apagamos o token.
+
+```ts
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-logout',
+  template: 'Fazendo logout...'
+})
+export class LogoutComponent {
+
+  constructor(router: Router) {
+    localStorage.setItem('AUTH-TOKEN', '')
+    router.navigate([''])
+  }
+
+}
+
+```
+
+
+## Entendendo o back-end
+
+Abra o arquivo com o código do back-end, e veja a lógica necessária para implementar em seu sistema, ou sua linguagem preferida.
+
+> OBS: App.get e App.post, recebem uma URL que seria a rota, e na sequência uma função que é executada quando a chamada para a URL cadastrada acontecer 

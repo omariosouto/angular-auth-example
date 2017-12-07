@@ -1,0 +1,25 @@
+<section class="jumbotron">
+  <h1 class="text-center" >Login \o/</h1>
+</section>
+
+<form class="container" (submit)="logar($event)">
+  <div>
+    <label for="usuario">Usuario</label>
+    <input [(ngModel)]="usuario.login"
+           id="usuario"
+           name="usuario"
+           type="text"
+           class="form-control">
+  </div>
+  <div>
+    <label for="senha">Senha</label>
+    <input [(ngModel)]="usuario.senha"
+           id="senha"
+           name="senha"
+           type="password"
+           class="form-control">
+  </div>
+  <button class="btn btn-success">
+    Logar
+  </button>
+</form>

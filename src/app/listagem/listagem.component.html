@@ -1,0 +1,11 @@
+<section class="jumbotron">
+  <h1 class="text-center" >Lista de Mensagens</h1>
+  <a class="btn btn-danger" [routerLink]="['/logout']">
+    Logout
+  </a>
+</section>
+<section class="container">
+  <ul>
+    <li *ngFor="let mensagem of mensagens">{{ mensagem.content }}</li>
+  </ul>
+</section>
