@@ -9,6 +9,7 @@ Para iniciar tudo suba o servidor com a API e com o Angular usando os comandos:
 Depois que instalar tudo:
 
 > node server.js
+
 > ng serve --port 4000
 
 Feito isso, abra o componente `/src/app/listagem/listagem.component.ts` e observe a lógica de funcionamento do componente a parte principal é:
