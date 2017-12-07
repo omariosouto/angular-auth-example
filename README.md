@@ -99,4 +99,7 @@ export class LogoutComponent {
 
 Abra o arquivo com o [código do back-end](https://github.com/omariosouto/angular-auth-example/blob/master/server.js), e veja a lógica necessária para implementar em seu sistema, ou sua linguagem preferida.
 
-> OBS: App.get e App.post, recebem uma URL que seria a rota, e na sequência uma função que é executada quando a chamada para a URL cadastrada acontecer 
+> OBS: App.get e App.post, recebem uma URL que seria a rota, e na sequência uma função que é executada quando a chamada para a URL cadastrada acontecer
+
+> OBS 2: Quaisquer dúvidas com relação ao código na parte do back-end, você pode me mandar um e-mail ou acessar a documentaço do Express [http://expressjs.com/](http://expressjs.com)
+
